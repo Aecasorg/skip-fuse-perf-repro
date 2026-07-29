@@ -1,0 +1,9 @@
+{
+  "object" : [
+    {
+      "mirror" : "https://github.com/Aecasorg/skip-ui.git",
+      "original" : "https://source.skip.tools/skip-ui.git"
+    }
+  ],
+  "version" : 1
+}
