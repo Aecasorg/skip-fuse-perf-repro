@@ -87,8 +87,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://source.skip.tools/skip-unit.git",
       "state" : {
-        "revision" : "920adff2065224ad592745a4cc028e9c2df137d4",
-        "version" : "1.6.1"
+        "revision" : "c89af47fd645e04db863e938ade39f91e1bb62b8",
+        "version" : "1.7.0"
       }
     },
     {
