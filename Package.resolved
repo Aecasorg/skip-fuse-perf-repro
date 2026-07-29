@@ -1,5 +1,5 @@
 {
-  "originHash" : "6c8afdbf7b8d7d7a96a01d0356c2a66bbd346297eeb9216e896c049fab041875",
+  "originHash" : "d8c689f2122d9ee5c2e5c9a578d05bfeec347ed54fbac4e1b7feb57bdaa21cd6",
   "pins" : [
     {
       "identity" : "skip",
@@ -78,8 +78,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://source.skip.tools/skip-ui.git",
       "state" : {
-        "revision" : "902b76bf8f6a2f983dfe0eb2b95056ce661e037a",
-        "version" : "1.59.2"
+        "revision" : "10e9a4db2cbf7f8394db148787caafd706627486",
+        "version" : "1.59.3"
       }
     },
     {
