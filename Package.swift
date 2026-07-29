@@ -10,13 +10,18 @@ let package = Package(
         .library(name: "PerfRepro", type: .dynamic, targets: ["PerfRepro"]),
     ],
     dependencies: [
-        // Exact pins: the repro must build against a known-good matched pair.
-        // skip-fuse-ui 1.18.0 + skip-ui 1.59.1 (latest as of 2026-07-23) fail to compile
-        // together ("missing argument for parameter 'bridgedAxis'"), so we pin the
-        // 1.17.2 / 1.57.0 pair the issues were verified against.
-        .package(url: "https://source.skip.tools/skip.git", exact: "1.9.4"),
-        .package(url: "https://source.skip.tools/skip-fuse-ui.git", exact: "1.17.2"),
-        .package(url: "https://source.skip.tools/skip-ui.git", exact: "1.57.0")
+        // Verification branch: mirror the driver app's entire resolved skip graph —
+        // the one set proven green on this machine and CI (2026-07-29).
+        .package(url: "https://source.skip.tools/skip.git", exact: "1.9.5"),
+        .package(url: "https://source.skip.tools/skip-fuse-ui.git", exact: "1.18.1"),
+        .package(url: "https://source.skip.tools/skip-ui.git", exact: "1.59.1"),
+        .package(url: "https://source.skip.tools/skip-fuse.git", exact: "1.0.2"),
+        .package(url: "https://source.skip.tools/skip-foundation.git", exact: "1.4.2"),
+        .package(url: "https://source.skip.tools/skip-model.git", exact: "1.7.6"),
+        .package(url: "https://source.skip.tools/skip-bridge.git", exact: "0.17.2"),
+        .package(url: "https://source.skip.tools/skip-android-bridge.git", exact: "0.6.4"),
+        .package(url: "https://source.skip.tools/skip-lib.git", exact: "1.4.0"),
+        .package(url: "https://source.skip.tools/skip-unit.git", exact: "1.6.1")
     ],
     targets: [
         .target(name: "PerfRepro", dependencies: [
