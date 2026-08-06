@@ -4,12 +4,14 @@ enum ReproScene: String, CaseIterable, Hashable {
     case unrelatedState
     case geometryLoop
     case relayHops
+    case sheetChurn
 
     var title: String {
         switch self {
         case .unrelatedState: return "1. Unrelated state tick"
         case .geometryLoop: return "2. GeometryReader idle loop"
         case .relayHops: return "3. onChange relay hops"
+        case .sheetChurn: return "4. Sheet: churn + detent settle"
         }
     }
 
@@ -18,6 +20,7 @@ enum ReproScene: String, CaseIterable, Hashable {
         case .unrelatedState: return "Static cards re-evaluate on every unrelated @Observable write"
         case .geometryLoop: return "Idle recomposition loop from unguarded float Rect writes"
         case .relayHops: return "+1 frame per onChange → state → onChange hop"
+        case .sheetChurn: return "Detent geometry settles a composition late; presenter churn amplifies into the open sheet"
         }
     }
 }
@@ -47,6 +50,7 @@ struct ContentView: View {
                 case .unrelatedState: UnrelatedStateScene()
                 case .geometryLoop: GeometryLoopScene()
                 case .relayHops: RelayHopScene()
+                case .sheetChurn: SheetScene()
                 }
             }
         }
