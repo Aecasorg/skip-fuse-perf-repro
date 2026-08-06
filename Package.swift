@@ -13,7 +13,7 @@ let package = Package(
         // Verification branch: matched trio pinned; the rest float to a fresh resolve.
         .package(url: "https://source.skip.tools/skip.git", exact: "1.9.5"),
         .package(url: "https://source.skip.tools/skip-fuse-ui.git", exact: "1.18.1"),
-        .package(url: "https://source.skip.tools/skip-ui.git", exact: "1.59.3")
+        .package(url: "https://source.skip.tools/skip-ui.git", exact: "1.59.1002")
     ],
     targets: [
         .target(name: "PerfRepro", dependencies: [
