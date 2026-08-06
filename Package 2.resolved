@@ -1,5 +1,5 @@
 {
-  "originHash" : "1000a7cf4aeae07f6c91dc477dbf764ed78b0da154903be257ba0d9c043b8357",
+  "originHash" : "282d205c69e3d549a1591ffa889b712ec9bf4abb370c8787a4c8e8f19af344a9",
   "pins" : [
     {
       "identity" : "skip",
@@ -76,10 +76,10 @@
     {
       "identity" : "skip-ui",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Aecasorg/skip-ui.git",
+      "location" : "https://source.skip.tools/skip-ui.git",
       "state" : {
-        "revision" : "6c215ea85d68b2e0eb999756a194b0c972159ea0",
-        "version" : "1.59.1002"
+        "revision" : "ef7bbdd541cdf2efd3ce6ecde72337e1beb92366",
+        "version" : "1.59.1"
       }
     },
     {
@@ -87,8 +87,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://source.skip.tools/skip-unit.git",
       "state" : {
-        "revision" : "c89af47fd645e04db863e938ade39f91e1bb62b8",
-        "version" : "1.7.0"
+        "revision" : "920adff2065224ad592745a4cc028e9c2df137d4",
+        "version" : "1.6.1"
       }
     },
     {
