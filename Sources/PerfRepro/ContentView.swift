@@ -5,6 +5,7 @@ enum ReproScene: String, CaseIterable, Hashable {
     case geometryLoop
     case relayHops
     case sheetChurn
+    case dismissRace
 
     var title: String {
         switch self {
@@ -12,6 +13,7 @@ enum ReproScene: String, CaseIterable, Hashable {
         case .geometryLoop: return "2. GeometryReader idle loop"
         case .relayHops: return "3. onChange relay hops"
         case .sheetChurn: return "4. Sheet: churn + detent settle"
+        case .dismissRace: return "5. Dismiss race (must-tap-twice)"
         }
     }
 
@@ -21,6 +23,7 @@ enum ReproScene: String, CaseIterable, Hashable {
         case .geometryLoop: return "Idle recomposition loop from unguarded float Rect writes"
         case .relayHops: return "+1 frame per onChange → state → onChange hop"
         case .sheetChurn: return "Detent geometry settles a composition late; presenter churn amplifies into the open sheet"
+        case .dismissRace: return "Late Material3 onDismissRequest clobbers a selection made during the hide tween"
         }
     }
 }
@@ -51,6 +54,7 @@ struct ContentView: View {
                 case .geometryLoop: GeometryLoopScene()
                 case .relayHops: RelayHopScene()
                 case .sheetChurn: SheetScene()
+                case .dismissRace: DismissRaceScene()
                 }
             }
         }
