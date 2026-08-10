@@ -1,5 +1,5 @@
 {
-  "originHash" : "1000a7cf4aeae07f6c91dc477dbf764ed78b0da154903be257ba0d9c043b8357",
+  "originHash" : "dd180df3aa4b1456b317c6b673e90c506b0892ec27c8fe1e3d0d3221d5cb8a26",
   "pins" : [
     {
       "identity" : "skip",
@@ -78,8 +78,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Aecasorg/skip-ui.git",
       "state" : {
-        "revision" : "6c215ea85d68b2e0eb999756a194b0c972159ea0",
-        "version" : "1.59.1002"
+        "revision" : "3306f298bf28f265edc4c9685f3bf7d21b32d5da",
+        "version" : "1.59.1005"
       }
     },
     {
