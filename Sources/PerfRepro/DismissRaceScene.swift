@@ -75,6 +75,14 @@ struct RaceHarness: View {
         )) {
             if let shown = item ?? cachedItem {
                 VStack {
+                    // Mirrors the driver app's dismissal route: an in-sheet close
+                    // button that clears the item from app code, rather than the
+                    // Android back gesture.
+                    Button("Close (X)") {
+                        logger.info("CLOSE tapped — clearing item")
+                        item = nil
+                    }
+                    .padding()
                     Text("Sheet for \(shown.title)")
                         .font(.headline)
                         .padding()
