@@ -6,6 +6,7 @@ enum ReproScene: String, CaseIterable, Hashable {
     case relayHops
     case sheetChurn
     case dismissRace
+    case pushRoute
 
     var title: String {
         switch self {
@@ -14,6 +15,7 @@ enum ReproScene: String, CaseIterable, Hashable {
         case .relayHops: return "3. onChange relay hops"
         case .sheetChurn: return "4. Sheet: churn + detent settle"
         case .dismissRace: return "5. Dismiss race (must-tap-twice)"
+        case .pushRoute: return "6. Push route (spike vs sheet)"
         }
     }
 
@@ -24,6 +26,7 @@ enum ReproScene: String, CaseIterable, Hashable {
         case .relayHops: return "+1 frame per onChange → state → onChange hop"
         case .sheetChurn: return "Detent geometry settles a composition late; presenter churn amplifies into the open sheet"
         case .dismissRace: return "Late Material3 onDismissRequest clobbers a selection made during the hide tween"
+        case .pushRoute: return "Detail as a navigation push — no Dialog window, so no swallowed tap or blank frame?"
         }
     }
 }
@@ -55,6 +58,7 @@ struct ContentView: View {
                 case .relayHops: RelayHopScene()
                 case .sheetChurn: SheetScene()
                 case .dismissRace: DismissRaceScene()
+                case .pushRoute: PushRouteScene()
                 }
             }
         }
