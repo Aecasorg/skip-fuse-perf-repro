@@ -1,7 +1,7 @@
 # Skip Fuse performance repros
 
 A minimal [Skip](https://skip.dev) Fuse app (created with `skip init --native-app`)
-demonstrating three Android-only performance behaviors, each backing an issue filed
+demonstrating Android-only performance and layout behaviors, each backing an issue filed
 against skip.tools. Identical SwiftUI code runs on both platforms; the divergence is
 observable through per-view body-evaluation counters logged once per second.
 
@@ -12,6 +12,7 @@ observable through per-view body-evaluation counters logged once per second.
 | 1. Unrelated state tick | An `@Observable` counter ticks once per second; the only view reading it is a header `Text`. On Android all 20 static cards below re-evaluate on every tick (eager *and* lazy/stable-id variants). On iOS they never re-evaluate. | skip-bridge: bridged peers never skippable; skip-ui: container-scope invalidation + lazy items re-evaluated every pass *(issue links TBD)* |
 | 2. GeometryReader idle loop | A `GeometryReader` whose content lays out against the reported size. On Android the body counters keep climbing while the screen sits completely idle. On iOS they stop after layout settles. | skip-ui: no epsilon on float `Rect` bounds writes *(issue link TBD)* |
 | 3. onChange relay hops | A button write relays a → b → c through `.onChange`. On Android each hop lands ~one frame (~16 ms) after the previous; on iOS all stamps share the same transaction. | skip-ui: `.onChange` runs post-apply in `SideEffect` *(issue link TBD)* |
+| 4. Resizable icons | Rows with a resizable asset icon sized by `.aspectRatio(contentMode: .fit).frame(height:)`, in a `List`, in a sheet and in the sheet's toolbar, plus a fixed-frame control row. On Android since skip-ui 1.60.0 the icon takes all the free width of its row and draws centred, and the sheet's inline title disappears. On iOS every icon sits at its edge. | skip-ui: resizable images sized by their aspect ratio take the whole `HStack` row *(issue link TBD)* |
 
 ## Running
 

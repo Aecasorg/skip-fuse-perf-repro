@@ -10,13 +10,15 @@ let package = Package(
         .library(name: "PerfRepro", type: .dynamic, targets: ["PerfRepro"]),
     ],
     dependencies: [
-        // Exact pins: the repro must build against a known-good matched pair.
-        // skip-fuse-ui 1.18.0 + skip-ui 1.59.1 (latest as of 2026-07-23) fail to compile
-        // together ("missing argument for parameter 'bridgedAxis'"), so we pin the
-        // 1.17.2 / 1.57.0 pair the issues were verified against.
-        .package(url: "https://source.skip.tools/skip.git", exact: "1.9.4"),
-        .package(url: "https://source.skip.tools/skip-fuse-ui.git", exact: "1.17.2"),
-        .package(url: "https://source.skip.tools/skip-ui.git", exact: "1.57.0")
+        // Exact pins: the Skip versions the driver app builds Android with, apart from
+        // skip-ui, which is upstream here. skip-lib 1.4.3 does not compile for Android,
+        // and skip 1.9.13 needs skip-bridge 0.18.0.
+        .package(url: "https://github.com/skiptools/skip.git", exact: "1.9.11"),
+        .package(url: "https://github.com/skiptools/skip-fuse-ui.git", exact: "1.19.0"),
+        .package(url: "https://github.com/skiptools/skip-ui.git", exact: "1.61.0"),
+        .package(url: "https://github.com/skiptools/skip-bridge.git", exact: "0.17.3"),
+        .package(url: "https://github.com/skiptools/skip-lib.git", exact: "1.4.2"),
+        .package(url: "https://github.com/skiptools/skip-android-bridge.git", exact: "0.6.6")
     ],
     targets: [
         .target(name: "PerfRepro", dependencies: [
