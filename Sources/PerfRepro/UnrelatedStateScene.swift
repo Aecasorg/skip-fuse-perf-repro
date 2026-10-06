@@ -24,6 +24,7 @@ struct CardItem: Identifiable, Hashable {
 struct UnrelatedStateScene: View {
     @State var model = TickModel()
     @State var useLazy = false
+    @State var useAndroidEquatable = false
     let items = (0..<20).map { CardItem(id: $0) }
 
     var body: some View {
@@ -34,11 +35,14 @@ struct UnrelatedStateScene: View {
                 .font(.headline)
             Toggle("LazyVStack + stable ids", isOn: $useLazy)
                 .padding(.horizontal)
+            Toggle("androidEquatable on cards", isOn: $useAndroidEquatable)
+                .padding(.horizontal)
             if useLazy {
                 ScrollView {
                     LazyVStack(spacing: 8) {
                         ForEach(items) { item in
                             StaticCardView(index: item.id)
+                                .androidEquatableIf(useAndroidEquatable, key: item.id)
                         }
                     }
                 }
@@ -47,6 +51,7 @@ struct UnrelatedStateScene: View {
                     VStack(spacing: 8) {
                         ForEach(items) { item in
                             StaticCardView(index: item.id)
+                                .androidEquatableIf(useAndroidEquatable, key: item.id)
                         }
                     }
                 }
@@ -77,5 +82,22 @@ struct StaticCardView: View {
         .padding()
         .background(Color.gray.opacity(0.15))
         .padding(.horizontal)
+    }
+}
+
+extension View {
+    /// skip-fuse-ui's `androidEquatable(recomposeOverride:)` (1.18.3+) when `enabled`, on
+    /// Android only. iOS SwiftUI has no such modifier, and skips unchanged cards by itself.
+    @ViewBuilder
+    func androidEquatableIf<Key: Equatable>(_ enabled: Bool, key: Key) -> some View {
+        #if os(Android)
+        if enabled {
+            self.androidEquatable(recomposeOverride: key)
+        } else {
+            self
+        }
+        #else
+        self
+        #endif
     }
 }
