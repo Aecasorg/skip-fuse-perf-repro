@@ -18,14 +18,22 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.MonotonicFrameClock
+import androidx.compose.runtime.PausableMonotonicFrameClock
+import androidx.compose.runtime.Recomposer
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.luminance
+import androidx.compose.ui.platform.AndroidUiDispatcher
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.material3.MaterialTheme
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 
 internal val logger: SkipLogger = SkipLogger(subsystem = "perf.repro", category = "PerfRepro")
 
@@ -59,7 +67,13 @@ open class MainActivity: AppCompatActivity {
         UIApplication.launch(this)
         enableEdgeToEdge()
 
-        setContent {
+        // Prototype: launch with `--ez pauseCompositionWhileStopped true` to stop composition
+        // while the activity is stopped, as Compose's window recomposer did before 1.5.
+        val pauseWhileStopped = intent.getBooleanExtra("pauseCompositionWhileStopped", false)
+        logger.info("pauseCompositionWhileStopped=${pauseWhileStopped}")
+        val parent = if (pauseWhileStopped) recomposerPausedWhileStopped() else null
+
+        setContent(parent = parent) {
             val saveableStateHolder = rememberSaveableStateHolder()
             saveableStateHolder.SaveableStateProvider(true) {
                 PresentationRootView(ComposeContext())
@@ -79,6 +93,25 @@ open class MainActivity: AppCompatActivity {
         //)
         //let requestTag = 1
         //ActivityCompat.requestPermissions(self, permissions.toTypedArray(), requestTag)
+    }
+
+    /// A recomposer whose frame clock pauses on ON_STOP and resumes on ON_START. Recomposition
+    /// waits on that clock, so invalidations collect while the activity is stopped and are
+    /// recomposed in one pass when it starts again.
+    private fun recomposerPausedWhileStopped(): Recomposer {
+        val frameClock = PausableMonotonicFrameClock(AndroidUiDispatcher.Main[MonotonicFrameClock]!!)
+        val recomposerContext = AndroidUiDispatcher.Main + frameClock
+        val recomposer = Recomposer(recomposerContext)
+        lifecycleScope.launch(recomposerContext) { recomposer.runRecomposeAndApplyChanges() }
+        lifecycle.addObserver(LifecycleEventObserver { _, event ->
+            when (event) {
+                Lifecycle.Event.ON_START -> frameClock.resume()
+                Lifecycle.Event.ON_STOP -> frameClock.pause()
+                Lifecycle.Event.ON_DESTROY -> recomposer.cancel()
+                else -> Unit
+            }
+        })
+        return recomposer
     }
 
     override fun onStart() {

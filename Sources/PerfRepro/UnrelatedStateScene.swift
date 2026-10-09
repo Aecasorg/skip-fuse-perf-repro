@@ -22,6 +22,7 @@ struct CardItem: Identifiable, Hashable {
 }
 
 struct UnrelatedStateScene: View {
+    @Environment(\.scenePhase) var scenePhase
     @State var model = TickModel()
     @State var useLazy = false
     @State var useAndroidEquatable = false
@@ -56,6 +57,9 @@ struct UnrelatedStateScene: View {
                     }
                 }
             }
+        }
+        .onChange(of: scenePhase) { _, newPhase in
+            logger.info("scene-phase \(String(describing: newPhase)) at tick=\(self.model.tick)")
         }
         .task {
             while Task.isCancelled == false {

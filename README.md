@@ -31,6 +31,28 @@ tick=7 evals: StaticCardView=160 UnrelatedStateScene=8
 On iOS `StaticCardView` stays at 20 (the initial render). On Android it grows by 20 per
 tick.
 
+## Stopped activity: pausing composition (prototype)
+
+Compose keeps recomposing a stopped window (Compose 1.5+), so scene 1 keeps evaluating bodies
+after Home or with the screen off, at the on-screen rate. On this branch `MainActivity` can
+restore the pre-1.5 behaviour. Launched with
+
+```
+adb shell am start -n tools.skip.perfrepro/perf.repro.MainActivity --ez pauseCompositionWhileStopped true
+```
+
+it hands `setContent` a `Recomposer` whose frame clock pauses on `ON_STOP` and resumes on
+`ON_START`. Without the extra the app behaves as stock. Scene 1 also logs a `scene-phase …`
+line from `.onChange(of: scenePhase)`.
+
+Open scene 1, press Home (Android freezes a cached app about 70 s later) or turn the screen
+off, and watch `adb logcat | grep PerfRepro`:
+
+- stock: `StaticCardView` keeps growing by 20 per tick while stopped, and
+  `scene-phase background` is logged;
+- paused: the counters stop while stopped, catch up in one pass on return, and no
+  `scene-phase` line is logged at all.
+
 ## Version pins
 
 `Package.swift` pins an exactly matched set — skip 1.9.4, skip-fuse-ui 1.17.2,
