@@ -5,6 +5,7 @@ enum ReproScene: String, CaseIterable, Hashable {
     case geometryLoop
     case relayHops
     case resizableIconSheet
+    case fixedSizeScrollView
 
     var title: String {
         switch self {
@@ -12,6 +13,7 @@ enum ReproScene: String, CaseIterable, Hashable {
         case .geometryLoop: return "2. GeometryReader idle loop"
         case .relayHops: return "3. onChange relay hops"
         case .resizableIconSheet: return "4. Resizable icons"
+        case .fixedSizeScrollView: return "5. Fixed-size ScrollView"
         }
     }
 
@@ -21,6 +23,7 @@ enum ReproScene: String, CaseIterable, Hashable {
         case .geometryLoop: return "Idle recomposition loop from unguarded float Rect writes"
         case .relayHops: return "+1 frame per onChange → state → onChange hop"
         case .resizableIconSheet: return "Icons sized by aspect ratio fill their row on Android since skip-ui 1.60.0"
+        case .fixedSizeScrollView: return "A ScrollView with .fixedSize() on its scroll axis crashes on Android"
         }
     }
 }
@@ -51,6 +54,7 @@ struct ContentView: View {
                 case .geometryLoop: GeometryLoopScene()
                 case .relayHops: RelayHopScene()
                 case .resizableIconSheet: ResizableIconSheetScene()
+                case .fixedSizeScrollView: FixedSizeScrollViewScene()
                 }
             }
         }
